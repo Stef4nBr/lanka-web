@@ -20,6 +20,9 @@
   "type": "commonjs",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "frontend": "npm start --prefix frontend",
+    "frontend:build": "npm run build --prefix frontend",
+    "backend": "node backend/index.js",
+    "dev": "concurrently \"npm run backend\" \"npm run frontend\""
   }
 }
