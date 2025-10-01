@@ -1,0 +1,25 @@
+{
+  "name": "lanka-web",
+  "version": "1.0.0",
+  "description": "web for lanparty comunities",
+  "keywords": [
+    "lanparty",
+    "web",
+    "managment"
+  ],
+  "homepage": "https://github.com/Stef4nBr/lanka-web#readme",
+  "bugs": {
+    "url": "https://github.com/Stef4nBr/lanka-web/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Stef4nBr/lanka-web.git"
+  },
+  "license": "ISC",
+  "author": "StefanBr",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
+}
