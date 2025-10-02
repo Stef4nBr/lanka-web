@@ -22,9 +22,12 @@
   "scripts": {
     "frontend": "npm start --prefix frontend",
     "frontend:build": "npm run build --prefix frontend",
-    "backend": "node backend/index.js",
+    "backend": "cd backend && node index.js",
     "both": "concurrently \"npm run backend\" \"npm run frontend\"",
     "install-all": "npm install --prefix frontend && npm install --prefix backend",
-    "install-concurrently": "npm i -L concurrently"
+    "install-concurrently": "npm i -g concurrently"
+  },
+  "devDependencies": {
+    "concurrently": "^9.2.1"
   }
 }
