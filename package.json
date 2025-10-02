@@ -1,0 +1,33 @@
+{
+  "name": "lanka-web",
+  "version": "1.0.0",
+  "description": "web for lanparty comunities",
+  "keywords": [
+    "lanparty",
+    "web",
+    "managment"
+  ],
+  "homepage": "https://github.com/Stef4nBr/lanka-web#readme",
+  "bugs": {
+    "url": "https://github.com/Stef4nBr/lanka-web/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Stef4nBr/lanka-web.git"
+  },
+  "license": "ISC",
+  "author": "StefanBr",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "frontend": "npm start --prefix frontend",
+    "frontend:build": "npm run build --prefix frontend",
+    "backend": "cd backend && node index.js",
+    "both": "concurrently \"npm run backend\" \"npm run frontend\"",
+    "install-all": "npm install --prefix frontend && npm install --prefix backend",
+    "install-concurrently": "npm i -g concurrently"
+  },
+  "devDependencies": {
+    "concurrently": "^9.2.1"
+  }
+}
