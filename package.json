@@ -25,6 +25,6 @@
     "backend": "node backend/index.js",
     "both": "concurrently \"npm run backend\" \"npm run frontend\"",
     "install-all": "npm install --prefix frontend && npm install --prefix backend",
-    "install-concurrently": "npm i -L concurrently"
+    "install-concurrently": "npm i -g concurrently"
   }
 }
