@@ -44,3 +44,6 @@ coverage/
 # Optional: Ignore parcel or other bundler artifacts
 .cache/
 .parcel-cache/
+
+# Database files
+backend/data.db
