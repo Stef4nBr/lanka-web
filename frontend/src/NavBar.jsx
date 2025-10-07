@@ -1,4 +1,4 @@
-import './navBar.css';
+import './NavBar.css';
 import AuthModal from './AuthModal';
 
 
