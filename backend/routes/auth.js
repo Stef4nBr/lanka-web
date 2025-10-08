@@ -1,33 +1,41 @@
+const { getRecords } = require('../database');
 const jwt = require("jsonwebtoken");
 const express = require('express');
 const router = express.Router();
 
-
-router.post('/sign-in', (req, res, next) => {
-    // Extracting JWT secret from environment variable
+// POST /sign-in
+router.post('/sign-in', async (req, res) => {
     const JWT_SECRET = process.env.JWT_SECRET;
-    //Extracting token from authorization header
     const { authorization } = req.headers;
-    // Checking if authorization header is present
-    //authorization === 'Bearer "token"'
-    if (!authorization) {
-        return res.status(404).send({ error: "Must be logged in" });
-    }
-    // Removing 'Bearer ' prefix to get the token
-    const token = authorization.replace("Bearer ", "");
-    //Verifying if the token is valid.
-    jwt.verify(token, JWT_SECRET, async (err, payload) => {
-        if (err) {
-            return res.status(403).send("Could not verify token");
-        }
-        // Adding user information to the request object
-        req.user = payload;
-    });
-    next();
 
-    // return res
-    //     .status(200)
-    //     .json({ message: "User Logged in Successfully", token });
-})
+    if (!authorization) {
+        return res.status(401).json({ error: "Authorization header missing" });
+    }
+
+    // Extract token from "Bearer <token>"
+    const token = authorization.replace("Bearer ", "");
+
+    try {
+        const payload = jwt.verify(token, JWT_SECRET);
+
+        console.log("Payload from token:", payload);
+        console.log("Request Body User:", req.body.user);
+
+        const record = await getRecords(req.body.user, req.body.password);
+
+        if ((record.name = !req.body.user) || (record.password = !req.body.password)) {
+            return res.status(401).json({ error: "Invalid credentials" });
+        }
+
+        return res.status(200).json({
+            message: "User Logged in Successfully",
+            token
+        });
+
+    } catch (err) {
+        console.error("JWT Verification Error:", err);
+        return res.status(403).json({ error: "Could not verify token" });
+    }
+});
 
 module.exports = router;
