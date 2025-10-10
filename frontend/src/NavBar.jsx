@@ -4,6 +4,7 @@ import Navbar from 'react-bootstrap/Navbar';
 import Nav from 'react-bootstrap/Nav';
 import Button from 'react-bootstrap/Button';
 import { useState, useMemo } from 'react';
+import Logo from './Logo';
 
 function NavBar() {
   const [authorized, setAuthorized_] = useState(false);
@@ -23,7 +24,8 @@ function NavBar() {
   return (
     <Navbar bg="dark" variant="dark" expand="lg">
       <Container>
-        <Navbar.Brand href="#home">www.lan.ka/</Navbar.Brand>
+   
+        <Logo href="#home"/>
         <Nav className="ms-auto align-items-center">
           <Button variant="outline-light" className="me-2">How to play</Button>
           <AuthModal variant="primary" onAuthChange={setAuthorized_} />
