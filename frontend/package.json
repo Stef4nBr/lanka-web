@@ -11,6 +11,7 @@
     "bootstrap": "^5.3.8",
     "bootstrap-icons": "^1.13.1",
     "fabric": "^6.7.1",
+    "jsonwebtoken": "^9.0.2",
     "react": "^19.2.0",
     "react-bootstrap": "^2.10.10",
     "react-dom": "^19.2.0",
@@ -44,5 +45,4 @@
       "last 1 safari version"
     ]
   }
-  
 }

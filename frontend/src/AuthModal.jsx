@@ -1,28 +1,76 @@
-import { useState } from 'react';
+import { useState, useMemo, useEffect } from 'react';
+import axios from 'axios';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Modal from 'react-bootstrap/Modal';
 import InputGroup from 'react-bootstrap/InputGroup'; // <-- Add this
+import { isTokenValid } from './utils/utils';
 
-function LoginModal() {
+
+function LoginModal({ onAuthChange }) {
     const [show, setShow] = useState(false);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    
+    const [authorizedState, setAuthorizedState] = useState(false);
+
+    useEffect(() => {
+        const token = localStorage.getItem('jwtToken');
+        if (isTokenValid(token)) {
+            setAuthorizedState(!!token);
+            onAuthChange(!!token)
+        } else {
+            setAuthorizedState(false);
+            localStorage.removeItem('jwtToken');
+            if (onAuthChange) onAuthChange(false);
+        }
+    }, [onAuthChange]);
+
+    const authorized = useMemo(() => authorizedState, [authorizedState]);
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
 
-    const handleLogin = () => {
-        // Add login logic here
-        console.log('Logging in with:', { email, password });
+    const handleLogin = async () => {
+        try {
+            const response = await axios.post('http://localhost:4000/api/auth/sign-in',
+                { username: email, password: password },
+                { headers: { 'Content-Type': 'application/json' } }
+            );
+            if (response.status === 200) {
+                if (onAuthChange) onAuthChange(true);
+                setAuthorizedState(true);
+                if (response.data && response.data.token) {
+                    localStorage.setItem('jwtToken', response.data.token);
+                }
+            } else {
+                if (onAuthChange) onAuthChange(false);
+                localStorage.removeItem('jwtToken');
+            }
+            console.log('Login response:', response.data);
+        } catch (error) {
+            if (onAuthChange) onAuthChange(false);
+            localStorage.removeItem('jwtToken');
+            console.error('Login error:', error);
+        }
         handleClose();
+    };
+
+    const handleLogout = () => {
+        setAuthorizedState(false);
+        localStorage.removeItem('jwtToken');
+        if (onAuthChange) onAuthChange(false);
     };
 
     return (
         <>
-            <Button variant="primary" onClick={handleShow}>
-                Login
-            </Button>
+            {authorized ? (
+                <Button className="btn btn-warning" style={{ margin: '0 15px' }} variant="primary" onClick={handleLogout}>
+                    Logout
+                </Button>
+            ) : (
+                <Button style={{ margin: '0 15px' }} variant="primary" onClick={handleShow}>
+                    Login
+                </Button>
+            )}
 
             <Modal show={show} onHide={handleClose} centered>
                 <Modal.Header closeButton>
@@ -38,6 +86,7 @@ function LoginModal() {
                                 </InputGroup.Text>
                                 <Form.Control
                                     type="email"
+                                    required
                                     placeholder="Enter email"
                                     value={email}
                                     onChange={(e) => setEmail(e.target.value)}
@@ -54,6 +103,7 @@ function LoginModal() {
                                 </InputGroup.Text>
                                 <Form.Control
                                     type="password"
+                                    required
                                     placeholder="Password"
                                     value={password}
                                     onChange={(e) => setPassword(e.target.value)}
@@ -66,7 +116,11 @@ function LoginModal() {
                     <Button variant="secondary" onClick={handleClose}>
                         Cancel
                     </Button>
-                    <Button variant="primary" onClick={handleLogin}>
+                    <Button
+                        variant="primary"
+                        onClick={handleLogin}
+                        disabled={!email || !password}
+                    >
                         Login
                     </Button>
                 </Modal.Footer>
