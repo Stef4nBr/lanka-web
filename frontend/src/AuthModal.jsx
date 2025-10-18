@@ -7,7 +7,7 @@ import InputGroup from 'react-bootstrap/InputGroup'; // <-- Add this
 import { isTokenValid } from './utils/utils';
 
 
-function LoginModal({ onAuthChange }) {
+function AuthModal({ onAuthChange , authToken}) {
     const [show, setShow] = useState(false);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -18,13 +18,14 @@ function LoginModal({ onAuthChange }) {
         const token = localStorage.getItem('jwtToken');
         if (isTokenValid(token)) {
             setAuthorizedState(!!token);
-            onAuthChange(!!token)
+            onAuthChange(!!token);
+            authToken(token);
         } else {
             setAuthorizedState(false);
             localStorage.removeItem('jwtToken');
             if (onAuthChange) onAuthChange(false);
         }
-    }, [onAuthChange]);
+    }, [onAuthChange,authToken]);
 
     const authorized = useMemo(() => authorizedState, [authorizedState]);
     const handleClose = () => setShow(false);
@@ -48,6 +49,7 @@ function LoginModal({ onAuthChange }) {
             if (onAuthChange) onAuthChange(false);
             localStorage.removeItem('jwtToken');
             console.log('Login response:', response.data);
+
         } catch (error) {
             if (onAuthChange) onAuthChange(false);
             localStorage.removeItem('jwtToken');
@@ -136,4 +138,4 @@ function LoginModal({ onAuthChange }) {
     );
 }
 
-export default LoginModal;
+export default AuthModal;
