@@ -8,8 +8,24 @@ import {
   BoldExtension,
   HeadingExtension,
   StrikeExtension,
-  UnderlineExtension 
+  UnderlineExtension,
+  ListItemExtension,
+  OrderedListExtension,
+  BlockquoteExtension,
+  BulletListExtension,
+  CodeExtension,
+  HardBreakExtension,
+  HorizontalRuleExtension,
+  ImageExtension,
+  ItalicExtension,
+  LinkExtension,
+  TableCellExtension,
+  TaskListExtension,
+  TrailingNodeExtension,
+  NodeFormattingExtension,
+  TextHighlightExtension
 } from "remirror/extensions";
+import { TableExtension } from '@remirror/extension-react-tables';
 
 function LeandingPage() {
   const [showEditor, setShowEditor] = useState(false);
@@ -23,9 +39,25 @@ function LeandingPage() {
   const { manager } = useRemirror({
     extensions: () => [
       new BoldExtension({}),
+      new ItalicExtension({}),
       new HeadingExtension({}),
       new StrikeExtension({}),
       new UnderlineExtension({}),
+      new CodeExtension({}),
+      new BlockquoteExtension({}),
+      new BulletListExtension({}),
+      new OrderedListExtension({}),
+      new ListItemExtension({}),
+      new LinkExtension({}),
+      new ImageExtension({}),
+      new TableExtension({}),
+      new TableCellExtension({}),
+      new HorizontalRuleExtension({}),
+      new HardBreakExtension({}),
+      new TrailingNodeExtension({}),
+      new TaskListExtension({}),
+      new NodeFormattingExtension({}),
+      new TextHighlightExtension({}),
     ],
     content: initialContent,
   });
@@ -33,13 +65,13 @@ function LeandingPage() {
   return (
     <>
       <NavBar onAuthChange={undefined} onTokenChange={undefined} />
-    <button 
-      onClick={() => setShowEditor(!showEditor)}
-      className="btn btn-primary"
-      title={showEditor ? "Hide Editor" : "Show Editor"}
-    >
-      <i className={`bi ${showEditor ? "bi-eye-slash" : "bi-pencil"}`}></i>
-    </button>
+      <button
+        onClick={() => setShowEditor(!showEditor)}
+        className="btn btn-primary"
+        title={showEditor ? "Hide Editor" : "Show Editor"}
+      >
+        <i className={`bi ${showEditor ? "bi-eye-slash" : "bi-pencil"}`}></i>
+      </button>
       {showEditor && <MdxEditor />}
 
       <div style={{ padding: "20px", maxWidth: "800px", margin: "0 auto" }}>
@@ -51,7 +83,7 @@ function LeandingPage() {
                 border: "1px solid #ddd",
                 borderRadius: "8px",
                 padding: "20px",
-                backgroundColor: "#413c3cff",
+                backgroundColor: "#e7dadaff",
               }}
             >
               <Remirror
