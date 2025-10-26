@@ -31,6 +31,13 @@
     "concurrently": "^9.2.1"
   },
   "dependencies": {
-    "jwt-decode": "^4.0.0"
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.1",
+    "@remirror/core": "^3.0.2",
+    "@remirror/pm": "^3.0.1",
+    "@remirror/react": "^3.0.3",
+    "@remirror/react-editors": "^2.0.3",
+    "jwt-decode": "^4.0.0",
+    "remirror": "^3.0.3"
   }
 }

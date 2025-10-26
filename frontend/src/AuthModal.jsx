@@ -7,23 +7,25 @@ import InputGroup from 'react-bootstrap/InputGroup'; // <-- Add this
 import { isTokenValid } from './utils/utils';
 
 
-function LoginModal({ onAuthChange }) {
+function AuthModal({ onAuthChange , authToken}) {
     const [show, setShow] = useState(false);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [authorizedState, setAuthorizedState] = useState(false);
+    const [errorMessage, setErrorMessage] = useState('');
 
     useEffect(() => {
         const token = localStorage.getItem('jwtToken');
         if (isTokenValid(token)) {
             setAuthorizedState(!!token);
-            onAuthChange(!!token)
+            onAuthChange(!!token);
+            authToken(token);
         } else {
             setAuthorizedState(false);
             localStorage.removeItem('jwtToken');
             if (onAuthChange) onAuthChange(false);
         }
-    }, [onAuthChange]);
+    }, [onAuthChange,authToken]);
 
     const authorized = useMemo(() => authorizedState, [authorizedState]);
     const handleClose = () => setShow(false);
@@ -35,23 +37,29 @@ function LoginModal({ onAuthChange }) {
                 { username: email, password: password },
                 { headers: { 'Content-Type': 'application/json' } }
             );
-            if (response.status === 200) {
+            if (response.status === 200 && isTokenValid(response.data.token)) {
                 if (onAuthChange) onAuthChange(true);
                 setAuthorizedState(true);
                 if (response.data && response.data.token) {
                     localStorage.setItem('jwtToken', response.data.token);
                 }
-            } else {
-                if (onAuthChange) onAuthChange(false);
-                localStorage.removeItem('jwtToken');
+                handleClose();
+                return;
             }
+            if (onAuthChange) onAuthChange(false);
+            localStorage.removeItem('jwtToken');
             console.log('Login response:', response.data);
+
         } catch (error) {
             if (onAuthChange) onAuthChange(false);
             localStorage.removeItem('jwtToken');
             console.error('Login error:', error);
+            if (error.response.status === 401) {
+                setErrorMessage("False credentials");
+            } else {
+                setErrorMessage("Error to Login");
+            }
         }
-        handleClose();
     };
 
     const handleLogout = () => {
@@ -63,7 +71,7 @@ function LoginModal({ onAuthChange }) {
     return (
         <>
             {authorized ? (
-                <Button className="btn btn-warning" style={{ margin: '0 15px' }} variant="primary" onClick={handleLogout}>
+                <Button className="btn btn-warning" variant="primary" onClick={handleLogout}>
                     Logout
                 </Button>
             ) : (
@@ -113,7 +121,8 @@ function LoginModal({ onAuthChange }) {
                     </Form>
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button variant="secondary" onClick={handleClose}>
+                    <div className="has-error fade-in" style={{ margin: 'auto', color: 'red', fontSize: 18 }}>{errorMessage}  </div>
+                    <Button variant="secondary" onClick={() => { handleClose(); setErrorMessage('') }}>
                         Cancel
                     </Button>
                     <Button
@@ -129,4 +138,4 @@ function LoginModal({ onAuthChange }) {
     );
 }
 
-export default LoginModal;
+export default AuthModal;
