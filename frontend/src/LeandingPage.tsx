@@ -1,9 +1,11 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Remirror, useRemirror } from "@remirror/react";
-import type { RemirrorJSON } from "remirror";
+import { set, type RemirrorJSON } from "remirror";
 import NavBar from "./NavBar.jsx";
 import FabricTest from "./Fabric.jsx";
 import MdxEditor from "./MdxEditor.tsx";
+import "./index.css";
+
 import {
   BoldExtension,
   HeadingExtension,
@@ -23,18 +25,52 @@ import {
   TaskListExtension,
   TrailingNodeExtension,
   NodeFormattingExtension,
-  TextHighlightExtension
+  TextHighlightExtension,
 } from "remirror/extensions";
-import { TableExtension } from '@remirror/extension-react-tables';
+import { TableExtension } from "@remirror/extension-react-tables";
+import axios from "axios";
 
 function LeandingPage() {
+  const [authToken, setAuthToken] = useState<string | null>(null);
   const [showEditor, setShowEditor] = useState(false);
+  const [authenticated, setAuthenticated] = useState(false);
+  const [userName, setUserName] = useState<string | null>(null);
+  const [reloadTrigger, setReloadTrigger] = useState(0);
 
-  const [initialContent] = useState<RemirrorJSON | undefined>(() => {
+  const [initialContent, setInitialContent] = useState<RemirrorJSON | undefined>(() => {
     const content = window.localStorage.getItem("remirror-editor-content");
-    console.log("Loaded content:", content);
     return content ? JSON.parse(content) : undefined;
   });
+
+  // Trigger on mount/page reload
+  useEffect(() => {
+    setReloadTrigger(prev => prev + 1);
+  }, []);
+
+  useEffect(() => {
+    const loadContent = async () => {
+      if (!authToken || !userName) return;
+      
+      try {
+        const response = await axios.get(
+          `http://localhost:4000/api/content/load/${userName}`,
+          {
+            headers: {
+              Authorization: `Bearer ${authToken}`,
+            },
+          }
+        );
+        const { json } = response.data;
+        const parsedContent = json ? JSON.parse(json) : undefined;
+        window.localStorage.setItem("remirror-editor-content", JSON.stringify(parsedContent));
+        setInitialContent(parsedContent);
+      } catch (error) {
+        console.error("Error loading content:", error);
+      }
+    };
+
+    loadContent();
+  }, [authToken, userName, reloadTrigger]);
 
   const { manager } = useRemirror({
     extensions: () => [
@@ -64,21 +100,44 @@ function LeandingPage() {
 
   return (
     <>
-      <NavBar onAuthChange={undefined} onTokenChange={undefined} />
-      <button
-        onClick={() => setShowEditor(!showEditor)}
-        className="btn btn-primary"
-        title={showEditor ? "Hide Editor" : "Show Editor"}
-      >
-        <i className={`bi ${showEditor ? "bi-eye-slash" : "bi-pencil"}`}></i>
-      </button>
-      {showEditor && <MdxEditor />}
+      <NavBar
+        onTokenChange={setAuthToken}
+        onAuthChange={setAuthenticated}
+        loginUser={setUserName}
+      />
 
-      <div style={{ padding: "20px", maxWidth: "800px", margin: "0 auto" }}>
+      <div style={{ padding: "20px", maxWidth: "1000px", margin: "0 auto" }}>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            marginBottom: "20px",
+          }}
+        >
+          <h1 style={{ margin: 0 }}>Rendered Document</h1>
+          {authenticated && (
+            <button
+              onClick={() => setShowEditor(!showEditor)}
+              className="btn btn-primary"
+              title={showEditor ? "Leave Editor" : "Show Editor"}
+            >
+              <i
+                className={`bi ${
+                  showEditor ? "bi-arrow-90deg-left" : "bi-pencil"
+                }`}
+              ></i>
+            </button>
+          )}
+        </div>
+
+        {showEditor && authenticated && (
+          <MdxEditor token={authToken} loginUser={userName} />
+        )}
         {!showEditor && (
           <>
-            <h1>Rendered Document</h1>
             <div
+              className="remirror-editor"
               style={{
                 border: "1px solid #ddd",
                 borderRadius: "8px",

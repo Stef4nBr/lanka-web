@@ -1,6 +1,6 @@
 
-import React, { useEffect, useState, useCallback } from 'react';
-import type { AnyExtension, RemirrorJSON } from 'remirror';
+import React, {  useState, useCallback } from 'react';
+import type {  RemirrorJSON } from 'remirror';
 
 import {
   Remirror,
@@ -50,6 +50,7 @@ import {
   DropdownButton,
   
 } from "@remirror/react-ui";
+import axios from 'axios';
 
 const extensions = () => [
   new HeadingExtension({}),
@@ -125,7 +126,7 @@ const HighlightButtons = () => {
 
 function EditorToolbar() {
   return (
-    <Toolbar>
+    <Toolbar  style={{ padding: '8px' }}>
       <HistoryButtonGroup />
       <VerticalDivider />
       <HeadingLevelButtonGroup />
@@ -145,7 +146,7 @@ function EditorToolbar() {
   );
 }
 
-export default function Editor() {
+export default function Editor({ token, loginUser }: { token: any; loginUser: any }) {
   const STORAGE_KEY = 'remirror-editor-content';
 
   const [initialContent] = useState<RemirrorJSON | undefined>(() => {
@@ -165,7 +166,25 @@ export default function Editor() {
     if (currentContent) {
       // Store the JSON in localStorage
       window.localStorage.setItem(STORAGE_KEY, JSON.stringify(currentContent));
-      alert('Content saved to localStorage!');
+      
+      // Create FormData for multipart/form-data
+      const formData = new FormData();
+      formData.append('user_id', loginUser);
+      formData.append('json', JSON.stringify(currentContent));
+      
+      axios.post('http://localhost:4000/api/content/save', formData, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'multipart/form-data'
+        }
+      })
+        .then(() => {
+          alert('Content saved!');
+        })
+        .catch((error) => {
+          console.error('Error saving content:', error);
+          alert('Failed to save content.');
+        });
     }
   }, [currentContent, STORAGE_KEY]);
 
@@ -202,15 +221,18 @@ export default function Editor() {
 
           >
             <OnChangeJSON onChange={handleEditorChange} />
+            <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '10px' }}>
+              <button
+                className="btn btn-success"
+                onMouseDown={(event) => event.preventDefault()}
+                onClick={handleSave}
+              >
+                <i className="bi bi-save2" style={{ marginRight: '8px' }}></i>
+                 Save 
+              </button>
+            </div>
             <EditorToolbar />
             <HighlightButtons />
-            <button
-              onMouseDown={(event) => event.preventDefault()}
-              onClick={handleSave}
-              style={{ marginTop: '10px' }}
-            >
-              Save
-            </button>
           </Remirror>
         </ThemeProvider>
       </AllStyledComponent>

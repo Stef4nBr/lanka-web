@@ -5,7 +5,7 @@ import Nav from 'react-bootstrap/Nav';
 import Button from 'react-bootstrap/Button';
 import { useState, useMemo } from 'react';
 
-function NavBar({ onAuthChange, onTokenChange }) {
+function NavBar({ onAuthChange, onTokenChange, loginUser }) {
   const [authorized, setAuthorized_] = useState(false);
   const [token, setToken] = useState(null);
 
@@ -25,11 +25,12 @@ function NavBar({ onAuthChange, onTokenChange }) {
     try {
       const jwt = token || localStorage.getItem("jwtToken");
       const payload = JSON.parse(atob(jwt.split('.')[1]));
+      loginUser(payload.username);
       return payload.username || "";
     } catch (e) {
       return "";
     }
-  }, [authorized, token]);
+  }, [authorized, token, loginUser]);
 
   return (
     <Navbar bg="dark" variant="dark" expand="lg">
