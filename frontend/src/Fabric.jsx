@@ -74,7 +74,7 @@ const imageLibrary = [
   },
 ];
 
-function FabricTest({ authenticated = false, loginUser ,editMode = false}) {
+function FabricTest({ authenticated = false, loginUser, editMode = false }) {
   const canvasRef = useRef(null);
   const fabricCanvasRef = useRef(null);
   const [selectedImage, setSelectedImage] = useState(null);
@@ -88,7 +88,7 @@ function FabricTest({ authenticated = false, loginUser ,editMode = false}) {
   useEffect(() => {
     // Initialize fabric canvas
     let canvas = new Canvas(canvasRef.current, {
-      width: 800,
+      width: 1000,
       height: 600,
       backgroundColor: '#ffffff',
       selection: canEdit // Allow selection only if authenticated and in edit mode
@@ -177,7 +177,7 @@ function FabricTest({ authenticated = false, loginUser ,editMode = false}) {
             y: -0.5,
             offsetY: -16,
             cursorStyle: 'pointer',
-            mouseUpHandler: () => {}, // No action on mouseUp, handled by dblclick
+            mouseUpHandler: () => { }, // No action on mouseUp, handled by dblclick
             render: renderIcon(colorChangeImg),
             cornerSize: 24,
           });
@@ -212,7 +212,7 @@ function FabricTest({ authenticated = false, loginUser ,editMode = false}) {
             lockScalingX: !canEdit,
             lockScalingY: !canEdit,
           });
-          
+
           // Restore colorIndex for circles
           if (obj.type === 'circle' && obj.fill) {
             const colorIndex = baseColors.indexOf(obj.fill);
@@ -303,7 +303,7 @@ function FabricTest({ authenticated = false, loginUser ,editMode = false}) {
       if (shape === 'circle') {
         // Find color index in base colors
         const colorIndex = baseColors.indexOf(color);
-        
+
         fabricShape = new Circle({
           left: 100,
           top: 100,
@@ -318,7 +318,7 @@ function FabricTest({ authenticated = false, loginUser ,editMode = false}) {
           lockScalingX: !canEdit,
           lockScalingY: !canEdit,
         });
-        
+
         // Store the color index for cycling
         fabricShape.colorIndex = colorIndex >= 0 ? colorIndex : 0;
       }
@@ -395,13 +395,8 @@ function FabricTest({ authenticated = false, loginUser ,editMode = false}) {
   };
 
   return (
-    <div className="Fabric" style={{ padding: '20px' }}>
-      <h2>Sitting order</h2>
-      {!canEdit && (
-        <p style={{ color: 'red', fontWeight: 'bold' }}>
-          🔒 View-only mode. Please sign in to add and edit images.
-        </p>
-      )}
+    <div className="Fabric" style={{}}>
+      <h1 style={{ margin: '20px' }}>Sitting order</h1>
 
       <div style={{ display: 'flex', gap: '20px' }}>
         {/* Sidebar with image library - only show in edit mode */}
@@ -420,80 +415,80 @@ function FabricTest({ authenticated = false, loginUser ,editMode = false}) {
             <h3 style={{ fontSize: '16px', marginTop: 0 }}>Item Library</h3>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
               {imageLibrary.map((item) => (
-              <div
-                key={item.id}
-                onClick={() => handleItemClick(item)}
-                style={{
-                  cursor: canEdit ? 'pointer' : 'not-allowed',
-                  padding: '8px',
-                  border: selectedImage === item.id ? '2px solid #4CAF50' : '2px solid transparent',
-                  borderRadius: '4px',
-                  backgroundColor: '#fff',
-                  textAlign: 'center',
-                  transition: 'all 0.2s',
-                  opacity: canEdit ? 1 : 0.6,
-                  minHeight: '80px',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  justifyContent: 'center',
-                  alignItems: 'center'
-                }}
-                onMouseEnter={(e) => {
-                  if (canEdit) {
-                    e.currentTarget.style.transform = 'scale(1.05)';
-                    e.currentTarget.style.boxShadow = '0 2px 8px rgba(0,0,0,0.2)';
-                  }
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.transform = 'scale(1)';
-                  e.currentTarget.style.boxShadow = 'none';
-                }}
-              >
-                {item.type === 'image' && (
-                  <img
-                    src={item.thumbnail}
-                    alt={item.name}
-                    style={{
-                      width: '100%',
-                      height: 'auto',
-                      borderRadius: '4px',
-                      display: 'block'
-                    }}
-                  />
-                )}
-                {item.type === 'shape' && item.shape === 'circle' && (
-                  <div
-                    style={{
-                      width: '40px',
-                      height: '40px',
-                      borderRadius: '50%',
-                      backgroundColor: item.color,
-                      margin: '0 auto'
-                    }}
-                  />
-                )}
-                {item.type === 'text' && (
-                  <div
-                    style={{
-                      fontSize: '32px',
-                      fontWeight: 'bold',
-                      color: '#333'
-                    }}
-                  >
-                    T
-                  </div>
-                )}
-                <p style={{
-                  fontSize: '12px',
-                  margin: '5px 0 0 0',
-                  color: '#333'
-                }}>
-                  {item.name}
-                </p>
-              </div>
-            ))}
+                <div
+                  key={item.id}
+                  onClick={() => handleItemClick(item)}
+                  style={{
+                    cursor: canEdit ? 'pointer' : 'not-allowed',
+                    padding: '8px',
+                    border: selectedImage === item.id ? '2px solid #4CAF50' : '2px solid transparent',
+                    borderRadius: '4px',
+                    backgroundColor: '#fff',
+                    textAlign: 'center',
+                    transition: 'all 0.2s',
+                    opacity: canEdit ? 1 : 0.6,
+                    minHeight: '80px',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'center',
+                    alignItems: 'center'
+                  }}
+                  onMouseEnter={(e) => {
+                    if (canEdit) {
+                      e.currentTarget.style.transform = 'scale(1.05)';
+                      e.currentTarget.style.boxShadow = '0 2px 8px rgba(0,0,0,0.2)';
+                    }
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.transform = 'scale(1)';
+                    e.currentTarget.style.boxShadow = 'none';
+                  }}
+                >
+                  {item.type === 'image' && (
+                    <img
+                      src={item.thumbnail}
+                      alt={item.name}
+                      style={{
+                        width: '100%',
+                        height: 'auto',
+                        borderRadius: '4px',
+                        display: 'block'
+                      }}
+                    />
+                  )}
+                  {item.type === 'shape' && item.shape === 'circle' && (
+                    <div
+                      style={{
+                        width: '40px',
+                        height: '40px',
+                        borderRadius: '50%',
+                        backgroundColor: item.color,
+                        margin: '0 auto'
+                      }}
+                    />
+                  )}
+                  {item.type === 'text' && (
+                    <div
+                      style={{
+                        fontSize: '32px',
+                        fontWeight: 'bold',
+                        color: '#333'
+                      }}
+                    >
+                      T
+                    </div>
+                  )}
+                  <p style={{
+                    fontSize: '12px',
+                    margin: '5px 0 0 0',
+                    color: '#333'
+                  }}>
+                    {item.name}
+                  </p>
+                </div>
+              ))}
+            </div>
           </div>
-        </div>
         )}
 
         {/* Canvas area */}

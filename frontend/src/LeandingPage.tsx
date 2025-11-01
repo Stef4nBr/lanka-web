@@ -126,7 +126,7 @@ function LeandingPage() {
         onHowToPlayClick={handleHowToPlayClick}
       />
 
-      <div style={{ padding: "20px", maxWidth: "1000px", margin: "0 auto" }}>
+      <div style={{ maxWidth: "1000px", margin: "0 auto" }}>
         <div
           style={{
             display: "flex",
@@ -135,9 +135,10 @@ function LeandingPage() {
             marginBottom: "20px",
           }}
         >
-          <h1 style={{ margin: 0 }}>Rendered Document</h1>
+          <h1 style={{ margin: '20px' }}>Announcements</h1>
           {authenticated && (
             <button
+              style={{ margin: "15px" }}
               onClick={() => setShowEditor(!showEditor)}
               className="btn btn-primary"
               title={showEditor ? "Leave Editor" : "Show Editor"}
