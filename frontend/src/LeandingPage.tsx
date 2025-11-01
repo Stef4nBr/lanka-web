@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Remirror, useRemirror } from "@remirror/react";
 import { set, type RemirrorJSON } from "remirror";
 import NavBar from "./NavBar.jsx";
@@ -36,21 +36,28 @@ function LeandingPage() {
   const [authenticated, setAuthenticated] = useState(false);
   const [userName, setUserName] = useState<string | null>(null);
   const [reloadTrigger, setReloadTrigger] = useState(0);
+  const fabricRef = useRef<HTMLDivElement>(null);
 
-  const [initialContent, setInitialContent] = useState<RemirrorJSON | undefined>(() => {
+  const [initialContent, setInitialContent] = useState<
+    RemirrorJSON | undefined
+  >(() => {
     const content = window.localStorage.getItem("remirror-editor-content");
     return content ? JSON.parse(content) : undefined;
   });
 
   // Trigger on mount/page reload
   useEffect(() => {
-    setReloadTrigger(prev => prev + 1);
+    setReloadTrigger((prev) => prev + 1);
   }, []);
+
+  const handleHowToPlayClick = () => {
+    fabricRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
 
   useEffect(() => {
     const loadContent = async () => {
       if (!authToken || !userName) return;
-      
+
       try {
         const response = await axios.get(
           `http://localhost:4000/api/content/load/${userName}`,
@@ -60,9 +67,21 @@ function LeandingPage() {
             },
           }
         );
-        const { json } = response.data;
-        const parsedContent = json ? JSON.parse(json) : undefined;
-        window.localStorage.setItem("remirror-editor-content", JSON.stringify(parsedContent));
+        const { mdxContent } = response.data;
+        const { fabricContent } = response.data;
+        const parsedContent = mdxContent ? JSON.parse(mdxContent) : undefined;
+        const parsedFabricContent = fabricContent
+          ? JSON.parse(fabricContent)
+          : undefined;
+        window.localStorage.setItem(
+          "remirror-editor-content",
+          JSON.stringify(parsedContent)
+        );
+        parsedFabricContent &&
+          window.localStorage.setItem(
+            "fabric-editor-content",
+            JSON.stringify(parsedFabricContent)
+          );
         setInitialContent(parsedContent);
       } catch (error) {
         console.error("Error loading content:", error);
@@ -104,6 +123,7 @@ function LeandingPage() {
         onTokenChange={setAuthToken}
         onAuthChange={setAuthenticated}
         loginUser={setUserName}
+        onHowToPlayClick={handleHowToPlayClick}
       />
 
       <div style={{ padding: "20px", maxWidth: "1000px", margin: "0 auto" }}>
@@ -153,8 +173,14 @@ function LeandingPage() {
             </div>
           </>
         )}
+        <div ref={fabricRef}>
+          <FabricTest
+            authenticated={authenticated}
+            loginUser={userName}
+            editMode={showEditor}
+          />
+        </div>
       </div>
-      <FabricTest />
     </>
   );
 }

@@ -15,13 +15,18 @@ const upload = multer({
 
 // Create content (protected route) - accepts multipart/form-data
 router.post("/save", authenticateToken, upload.none(), async (req, res) => {
-  const { user_id, json } = req.body;
+  const { user_id, mdxContent, fabricContent } = req.body;
 
-  if (!json) {
-    return res.status(400).json({ error: "JSON content is required" });
+  // At least one content field should have data
+  if (!user_id) {
+    return res.status(400).json({ error: "User ID is required" });
   }
 
- await insertContent(user_id, json)
+ await insertContent({ 
+    user_id, 
+    mdxContent: mdxContent || null, 
+    fabricContent: fabricContent || null 
+  })
     .then((result) => {
       res.status(201).json(result);
     })

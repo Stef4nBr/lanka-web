@@ -5,7 +5,7 @@ import Nav from 'react-bootstrap/Nav';
 import Button from 'react-bootstrap/Button';
 import { useState, useMemo } from 'react';
 
-function NavBar({ onAuthChange, onTokenChange, loginUser }) {
+function NavBar({ onAuthChange, onTokenChange, loginUser, onHowToPlayClick }) {
   const [authorized, setAuthorized_] = useState(false);
   const [token, setToken] = useState(null);
 
@@ -37,10 +37,16 @@ function NavBar({ onAuthChange, onTokenChange, loginUser }) {
       <Container>
         <Navbar.Brand href="#home">www.lan.ka/</Navbar.Brand>
         <Nav className="ms-auto align-items-center">
-          <Button variant="outline-light" className="me-2">How to play</Button>
+          <Button 
+            variant="outline-light" 
+            className="me-2"
+            onClick={onHowToPlayClick}
+          >
+            Sitting order
+          </Button>
           <AuthModal variant="primary" onAuthChange={setAuthorized} authToken={handleTokenChange} />
           {authorized && (
-            <span className="text-white">Welcome! {username}</span>
+            <span style={{padding: '0 18px'}} className="text-white">Welcome! {username}</span>
           )}
         </Nav>
       </Container>
