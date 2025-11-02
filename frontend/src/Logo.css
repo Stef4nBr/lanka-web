@@ -1,0 +1,59 @@
+/* Logo styles with fancy font and animation */
+.logo-container {
+  margin: initial;
+  max-width: 100%;
+  width: fit-content;
+}
+
+.logo-svg {
+  width: 250px;
+  height: 80px;
+}
+
+.logo-text {
+  font-family: 'Courier New', 'Consolas', 'Monaco', monospace;
+  font-size: 48px;
+  font-weight: bold;
+  letter-spacing: 3px;
+  text-transform: lowercase;
+}
+
+.g-ants .text-copy {
+  fill: none;
+  stroke: #00ff88;
+  stroke-width: 2px;
+  stroke-dasharray: 7% 28%;
+  stroke-dashoffset: 0%;
+  animation: marching-ants 1s linear infinite;
+}
+
+.g-ants .text-copy:nth-child(1) {
+  stroke: #00ff88;
+  stroke-dashoffset: 0%;
+}
+
+.g-ants .text-copy:nth-child(2) {
+  stroke: #00ddff;
+  stroke-dashoffset: 7%;
+}
+
+.g-ants .text-copy:nth-child(3) {
+  stroke: #00bbff;
+  stroke-dashoffset: 14%;
+}
+
+.g-ants .text-copy:nth-child(4) {
+  stroke: #0099ff;
+  stroke-dashoffset: 21%;
+}
+
+.g-ants .text-copy:nth-child(5) {
+  stroke: #0077ff;
+  stroke-dashoffset: 28%;
+}
+
+@keyframes marching-ants {
+  to {
+    stroke-dashoffset: -35%;
+  }
+}

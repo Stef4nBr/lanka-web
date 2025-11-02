@@ -25,59 +25,23 @@ const baseColors = [
 
 // Sample images - you can add your own images in /public/static/images/
 const imageLibrary = [
-  {
-    id: 1,
-    name: 'Chair',
-    type: 'image',
-    url: '/static/images/chair.png',
-    thumbnail: '/static/images/chair.png'
-  },
-  {
-    id: 2,
-    name: 'Black Chair',
-    type: 'image',
-    url: '/static/images/chair_black.png',
-    thumbnail: '/static/images/chair_black.png'
-  },
-  {
-    id: 3,
-    name: 'Circle Table',
-    type: 'image',
-    url: '/static/images/table_circle.png',
-    thumbnail: '/static/images/table_circle.png'
-  },
-  {
-    id: 4,
-    name: 'Rectangle Table',
-    type: 'image',
-    url: '/static/images/table_rectangle.png',
-    thumbnail: '/static/images/table_rectangle.png'
-  },
-  {
-    id: 5,
-    name: 'Square Table',
-    type: 'image',
-    url: '/static/images/table_square.png',
-    thumbnail: '/static/images/table_square.png'
-  },
-  {
-    id: 6,
-    name: 'Occupied',
-    type: 'shape',
-    shape: 'circle',
-    color: '#FF0000'
-  },
-  {
-    id: 7,
-    name: 'Add Name tag',
-    type: 'text'
-  },
+  { id: 1, name: 'Chair', type: 'image', url: '/static/images/chair.png', thumbnail: '/static/images/chair.png' },
+  { id: 2, name: 'Black Chair', type: 'image', url: '/static/images/chair_black.png', thumbnail: '/static/images/chair_black.png' },
+  { id: 3, name: 'Circle Table', type: 'image', url: '/static/images/table_circle.png', thumbnail: '/static/images/table_circle.png' },
+  { id: 4, name: 'Rectangle Table', type: 'image', url: '/static/images/table_rectangle.png', thumbnail: '/static/images/table_rectangle.png' },
+  { id: 5, name: 'Square Table', type: 'image', url: '/static/images/table_square.png', thumbnail: '/static/images/table_square.png' },
+  { id: 6, name: 'Occupied', type: 'shape', shape: 'circle', color: '#FF0000' },
+  { id: 7, name: 'Add Name tag', type: 'text' },
+  { id: 8, name: 'Door', type: 'image', url: '/static/images/door.png', thumbnail: '/static/images/door.png' },
+  { id: 9, name: 'Double Door', type: 'image', url: '/static/images/double_door.png', thumbnail: '/static/images/double_door.png' }
 ];
 
 function FabricTest({ authenticated = false, loginUser, editMode = false }) {
   const canvasRef = useRef(null);
   const fabricCanvasRef = useRef(null);
+  const canvasContainerRef = useRef(null);
   const [selectedImage, setSelectedImage] = useState(null);
+  const [isFullscreen, setIsFullscreen] = useState(false);
   const [fabricContent, setFabricContentFromCookie] = useState(null
     || window.localStorage.getItem("fabric-editor-content"));
   const token = localStorage.getItem("jwtToken");
@@ -85,11 +49,42 @@ function FabricTest({ authenticated = false, loginUser, editMode = false }) {
   // Reusable flag for edit permissions - define once at component level
   const canEdit = authenticated && editMode;
 
+  // Fullscreen handlers
+  const toggleFullscreen = () => {
+    if (!document.fullscreenElement) {
+      canvasContainerRef.current?.requestFullscreen().then(() => {
+        setIsFullscreen(true);
+      }).catch((err) => {
+        console.error('Error attempting to enable fullscreen:', err);
+      });
+    } else {
+      document.exitFullscreen().then(() => {
+        setIsFullscreen(false);
+      });
+    }
+  };
+
+  // Listen for fullscreen changes
   useEffect(() => {
+    const handleFullscreenChange = () => {
+      setIsFullscreen(!!document.fullscreenElement);
+    };
+
+    document.addEventListener('fullscreenchange', handleFullscreenChange);
+    return () => {
+      document.removeEventListener('fullscreenchange', handleFullscreenChange);
+    };
+  }, []);
+
+  useEffect(() => {
+    // Determine canvas size based on fullscreen mode
+    const canvasWidth = isFullscreen ? 1400 : (editMode ? 800 : 1000);
+    const canvasHeight = isFullscreen ? 900 : 600;
+
     // Initialize fabric canvas
     let canvas = new Canvas(canvasRef.current, {
-      width: 1000,
-      height: 600,
+      width: canvasWidth,
+      height: canvasHeight,
       backgroundColor: '#ffffff',
       selection: canEdit // Allow selection only if authenticated and in edit mode
     });
@@ -368,7 +363,7 @@ function FabricTest({ authenticated = false, loginUser, editMode = false }) {
     return () => {
       canvas.dispose();
     };
-  }, [authenticated, editMode, fabricContent]);
+  }, [authenticated, editMode, fabricContent, isFullscreen]);
 
   const handleItemClick = (item) => {
     if (!canEdit) {
@@ -403,35 +398,38 @@ function FabricTest({ authenticated = false, loginUser, editMode = false }) {
         {editMode && (
           <div
             style={{
-              width: '150px',
-              border: '1px solid #ccc',
+              minWidth: '40px',
+              width: '120px',
+              border: '2px solid #ddd',
               borderRadius: '8px',
-              padding: '10px',
+              padding: '15px',
               backgroundColor: '#f9f9f9',
               maxHeight: '600px',
-              overflowY: 'auto'
+              overflowY: 'auto',
+              boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
             }}
           >
-            <h3 style={{ fontSize: '16px', marginTop: 0 }}>Item Library</h3>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+            <h3 style={{ fontSize: '18px', marginTop: 0, marginBottom: '15px', fontWeight: 'bold' }}>Item Library</h3>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
               {imageLibrary.map((item) => (
                 <div
                   key={item.id}
                   onClick={() => handleItemClick(item)}
                   style={{
                     cursor: canEdit ? 'pointer' : 'not-allowed',
-                    padding: '8px',
-                    border: selectedImage === item.id ? '2px solid #4CAF50' : '2px solid transparent',
-                    borderRadius: '4px',
+                    padding: '12px',
+                    border: selectedImage === item.id ? '3px solid #4CAF50' : '2px solid #e0e0e0',
+                    borderRadius: '8px',
                     backgroundColor: '#fff',
                     textAlign: 'center',
                     transition: 'all 0.2s',
                     opacity: canEdit ? 1 : 0.6,
-                    minHeight: '80px',
+                    minHeight: '100px',
                     display: 'flex',
                     flexDirection: 'column',
                     justifyContent: 'center',
-                    alignItems: 'center'
+                    alignItems: 'center',
+                    boxShadow: selectedImage === item.id ? '0 4px 8px rgba(76, 175, 80, 0.3)' : '0 1px 3px rgba(0,0,0,0.1)'
                   }}
                   onMouseEnter={(e) => {
                     if (canEdit) {
@@ -459,8 +457,8 @@ function FabricTest({ authenticated = false, loginUser, editMode = false }) {
                   {item.type === 'shape' && item.shape === 'circle' && (
                     <div
                       style={{
-                        width: '40px',
-                        height: '40px',
+                        width: '50px',
+                        height: '50px',
                         borderRadius: '50%',
                         backgroundColor: item.color,
                         margin: '0 auto'
@@ -470,7 +468,7 @@ function FabricTest({ authenticated = false, loginUser, editMode = false }) {
                   {item.type === 'text' && (
                     <div
                       style={{
-                        fontSize: '32px',
+                        fontSize: '40px',
                         fontWeight: 'bold',
                         color: '#333'
                       }}
@@ -479,9 +477,10 @@ function FabricTest({ authenticated = false, loginUser, editMode = false }) {
                     </div>
                   )}
                   <p style={{
-                    fontSize: '12px',
-                    margin: '5px 0 0 0',
-                    color: '#333'
+                    fontSize: '13px',
+                    margin: '8px 0 0 0',
+                    color: '#333',
+                    fontWeight: '500'
                   }}>
                     {item.name}
                   </p>
@@ -492,9 +491,53 @@ function FabricTest({ authenticated = false, loginUser, editMode = false }) {
         )}
 
         {/* Canvas area */}
-        <div style={{ flex: 1 }}>
-          <canvas ref={canvasRef} style={{ border: '2px solid #333', borderRadius: '4px' }} />
-          <p style={{ marginTop: '10px', fontSize: '14px', color: '#666' }}>
+        <div 
+          ref={canvasContainerRef}
+          style={{ 
+            flex: 1, 
+            maxWidth: editMode ? '800px' : '1000px',
+            position: 'relative',
+            backgroundColor: isFullscreen ? '#e9e9e9ff' : 'transparent',
+            padding: isFullscreen ? '20px' : '0',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center'
+          }}
+        >
+          {/* Fullscreen button */}
+          <button
+            onClick={toggleFullscreen}
+            style={{
+              position: 'absolute',
+              top: '10px',
+              right: '10px',
+              zIndex: 1000,
+              padding: '10px 15px',
+              backgroundColor: isFullscreen ? '#ff4444' : '#4CAF50',
+              color: 'white',
+              border: 'none',
+              borderRadius: '4px',
+              cursor: 'pointer',
+              fontSize: '14px',
+              fontWeight: 'bold',
+              boxShadow: '0 2px 8px rgba(0,0,0,0.2)',
+              transition: 'all 0.3s ease'
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.transform = 'scale(1.05)';
+              e.currentTarget.style.boxShadow = '0 4px 12px rgba(0,0,0,0.3)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = 'scale(1)';
+              e.currentTarget.style.boxShadow = '0 2px 8px rgba(0,0,0,0.2)';
+            }}
+          >
+            {isFullscreen ? '✕ Exit Fullscreen' : '⛶'}
+          </button>
+
+          <canvas ref={canvasRef} style={{ border: '2px solid #333', borderRadius: '4px', width: '100%', maxWidth: '100%' }} />
+          <p style={{ marginTop: '10px', fontSize: '14px', color: isFullscreen ? '#ccc' : '#666' }}>
             {canEdit
               ? 'Click on an item in the sidebar to add it to the canvas. Images, shapes, and text can be dragged, resized, and rotated. Use the controls to delete or clone.'
               : 'Sign in to add and edit items on the canvas.'

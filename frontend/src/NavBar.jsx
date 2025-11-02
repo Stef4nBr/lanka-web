@@ -34,8 +34,30 @@ function NavBar({ onAuthChange, onTokenChange, loginUser, onHowToPlayClick }) {
 
   return (
     <Navbar bg="dark" variant="dark" expand="lg">
-      <Container>
-        <Navbar.Brand href="#home">www.lan.ka/</Navbar.Brand>
+      <Container style={{maxWidth:'2500px'}}>
+        <img src='static/images/pac.gif' width={350} alt='Pacman' />
+        <Navbar.Brand 
+          href="#home"
+          style={{
+            fontFamily: '"Courier New", Consolas, Monaco, monospace',
+            fontSize: '32px',
+            fontWeight: 'bold',
+            letterSpacing: '2px',
+            color: '#00ff88',
+            textShadow: '0 0 10px rgba(0, 255, 136, 0.5), 0 0 20px rgba(0, 255, 136, 0.3)',
+            transition: 'all 0.3s ease'
+          }}
+          onMouseEnter={(e) => {
+            e.target.style.color = '#00ddff';
+            e.target.style.textShadow = '0 0 15px rgba(0, 221, 255, 0.7), 0 0 30px rgba(0, 221, 255, 0.4)';
+          }}
+          onMouseLeave={(e) => {
+            e.target.style.color = '#00ff88';
+            e.target.style.textShadow = '0 0 10px rgba(0, 255, 136, 0.5), 0 0 20px rgba(0, 255, 136, 0.3)';
+          }}
+        >
+          www.lan.ka/
+        </Navbar.Brand>
         <Nav className="ms-auto align-items-center">
           <Button 
             variant="outline-light" 
