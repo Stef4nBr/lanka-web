@@ -18,7 +18,8 @@ db.serialize(() => {
         CREATE TABLE IF NOT EXISTS content (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             user_id INTEGER NOT NULL UNIQUE,
-            json TEXT NOT NULL,
+            mdxContent TEXT,
+            fabricContent TEXT,
             created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
             updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
             FOREIGN KEY (user_id) REFERENCES users (id)
@@ -47,18 +48,22 @@ function getRecords(username, password) {
   });
 }
 
-function insertContent(user_id, json) {
+function insertContent({ user_id, mdxContent, fabricContent }) {
   return new Promise((resolve, reject) => {
-    // Use INSERT OR REPLACE to overwrite existing record for the user_id
+    // Use INSERT with ON CONFLICT to handle UPSERT
+    // Only update fields that are not null to preserve existing data
     db.run(
-      `INSERT INTO content (user_id, json, updated_at) 
-       VALUES (?, ?, CURRENT_TIMESTAMP)
+      `INSERT INTO content (user_id, mdxContent, fabricContent, updated_at) 
+       VALUES (?, ?, ?, CURRENT_TIMESTAMP)
        ON CONFLICT(user_id) 
-       DO UPDATE SET json = excluded.json, updated_at = CURRENT_TIMESTAMP`,
-      [user_id, json],
+       DO UPDATE SET 
+         mdxContent = CASE WHEN excluded.mdxContent IS NOT NULL THEN excluded.mdxContent ELSE mdxContent END,
+         fabricContent = CASE WHEN excluded.fabricContent IS NOT NULL THEN excluded.fabricContent ELSE fabricContent END,
+         updated_at = CURRENT_TIMESTAMP`,
+      [user_id, mdxContent || null, fabricContent || null],
       function (err) {
         if (err) return reject(err);
-        resolve({ id: this.lastID, user_id, json });
+        resolve({ id: this.lastID, user_id, mdxContent, fabricContent });
       }
     );
   });
@@ -66,27 +71,19 @@ function insertContent(user_id, json) {
 
 function loadContent(user_id) {
   return new Promise((resolve, reject) => {
-    db.get(
-      "SELECT * FROM content WHERE user_id = ?",
-      [user_id],
-      (err, row) => {
-        if (err) return reject(err);
-        
-        // If no content found for specific user, get all content
-        if (!row) {
-          db.all(
-            "SELECT * FROM content",
-            [],
-            (err, rows) => {
-              if (err) return reject(err);
-              resolve(rows);
-            }
-          );
-        } else {
-          resolve(row);
-        }
+    db.get("SELECT * FROM content WHERE user_id = ?", [user_id], (err, row) => {
+      if (err) return reject(err);
+
+      // If no content found for specific user, get all content
+      if (!row) {
+        db.all("SELECT * FROM content", [], (err, rows) => {
+          if (err) return reject(err);
+          resolve(rows);
+        });
+      } else {
+        resolve(row);
       }
-    );
+    });
   });
 }
 

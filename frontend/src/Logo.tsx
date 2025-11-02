@@ -4,10 +4,10 @@ import './Logo.css';
 function Logo(): React.ReactElement {
   return (
     <>
-      <div className="container" style={{ margin: 'initial', maxWidth: '100%', width: 'fit-content' }}>
-        <svg viewBox="0 0 960 300">
+      <div className="logo-container">
+        <svg className="logo-svg" viewBox="0 0 960 300">
           <symbol id="s-text">
-            <text textAnchor="middle" x="50%" y="80%">l̲a̲n̲.̲k̲a̲/̲</text>
+            <text className="logo-text" textAnchor="middle" x="50%" y="80%">www.lan.ka/</text>
           </symbol>
 
           <g className="g-ants">

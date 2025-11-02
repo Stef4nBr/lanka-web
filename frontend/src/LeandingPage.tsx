@@ -1,8 +1,8 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Remirror, useRemirror } from "@remirror/react";
 import { RemirrorJSON } from "remirror";
 import NavBar from "./NavBar";
-import Fabric from "./Fabric";
+import FabricTest from "./Fabric";
 import MdxEditor from "./MdxEditor";
 import "./index.css";
 
@@ -36,33 +36,43 @@ function LeandingPage() {
   const [authenticated, setAuthenticated] = useState(false);
   const [userName, setUserName] = useState<string | null>(null);
   const [reloadTrigger, setReloadTrigger] = useState(0);
+  const fabricRef = useRef<HTMLDivElement>(null);
 
-  const [initialContent, setInitialContent] = useState<RemirrorJSON | undefined>(() => {
+  const [initialContent, setInitialContent] = useState<
+    RemirrorJSON | undefined
+  >(() => {
     const content = window.localStorage.getItem("remirror-editor-content");
-    return content ? JSON.parse(content) : { type: "doc", content: []};
+    return content ? JSON.parse(content) : { type: "doc", content: [] };
   });
 
   // Trigger on mount/page reload
   useEffect(() => {
-    setReloadTrigger(prev => prev + 1);
+    setReloadTrigger((prev) => prev + 1);
   }, []);
+
+  const handleHowToPlayClick = () => {
+    fabricRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
 
   useEffect(() => {
     const loadContent = async () => {
       if (!authToken || !userName) return;
-      
+
       try {
         const response = await axios.get(
           `http://localhost:4000/api/content/load/${userName}`,
           {
-            headers: {
-              Authorization: `Bearer ${authToken}`,
-            },
+            headers: { Authorization: `Bearer ${authToken}` },
           }
         );
-        const { json } = response.data;
-        const parsedContent = json ? JSON.parse(json) : { type: "doc", content: []};
-        window.localStorage.setItem("remirror-editor-content", JSON.stringify(parsedContent));
+        const { mdxContent } = response.data;
+        const { fabricContent } = response.data;
+        const parsedContent = mdxContent ? JSON.parse(mdxContent) : { type: "doc", content: [] };
+        const parsedFabricContent = fabricContent
+          ? JSON.parse(fabricContent): undefined;
+        window.localStorage.setItem("remirror-editor-content",JSON.stringify(parsedContent));
+        parsedFabricContent &&
+          window.localStorage.setItem("fabric-editor-content", JSON.stringify(parsedFabricContent));
         setInitialContent(parsedContent);
       } catch (error) {
         console.error("Error loading content:", error);
@@ -104,9 +114,10 @@ function LeandingPage() {
         onTokenChange={setAuthToken}
         onAuthChange={setAuthenticated}
         loginUser={setUserName}
+        onHowToPlayClick={handleHowToPlayClick}
       />
 
-      <div style={{ padding: "20px", maxWidth: "1000px", margin: "0 auto" }}>
+      <div style={{ maxWidth: "1000px", margin: "0 auto" }}>
         <div
           style={{
             display: "flex",
@@ -115,17 +126,33 @@ function LeandingPage() {
             marginBottom: "20px",
           }}
         >
-            <h1 style={{ margin: 0, textAlign: "center", flex: 1 }}>Welcome to LanParty</h1>
+          <h1 style={{ 
+            margin: '20px',
+            fontSize: '2.5rem',
+            fontWeight: '700',
+            background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+            WebkitBackgroundClip: 'text',
+            WebkitTextFillColor: 'transparent',
+            backgroundClip: 'text',
+            textTransform: 'uppercase',
+            letterSpacing: '2px',
+            position: 'relative',
+            paddingBottom: '10px',
+            borderBottom: '3px solid #667eea',
+            display: 'inline-block'
+          }}>
+             Announcements
+          </h1>
           {authenticated && (
             <button
+              style={{ margin: "15px" }}
               onClick={() => setShowEditor(!showEditor)}
               className="btn btn-primary"
               title={showEditor ? "Leave Editor" : "Show Editor"}
             >
               <i
-                className={`bi ${
-                  showEditor ? "bi-arrow-90deg-left" : "bi-pencil"
-                }`}
+                className={`bi ${showEditor ? "bi-arrow-90deg-left" : "bi-pencil"
+                  }`}
               ></i>
             </button>
           )}
@@ -156,8 +183,15 @@ function LeandingPage() {
             </div>
           </>
         )}
+        <div ref={fabricRef}>
+          <FabricTest
+            authenticated={authenticated}
+            loginUser={userName}
+            editMode={showEditor}
+            token={authToken}
+          />
+        </div>
       </div>
-      <Fabric />
     </>
   );
 }

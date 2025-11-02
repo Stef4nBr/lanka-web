@@ -166,11 +166,13 @@ export default function Editor({ token, loginUser }: { token: any; loginUser: an
     if (currentContent) {
       // Store the JSON in localStorage
       window.localStorage.setItem(STORAGE_KEY, JSON.stringify(currentContent));
+      const fabricContent = window.localStorage.getItem('fabric-editor-content');
       
       // Create FormData for multipart/form-data
       const formData = new FormData();
       formData.append('user_id', loginUser);
-      formData.append('json', JSON.stringify(currentContent));
+      formData.append('mdxContent', JSON.stringify(currentContent));
+      fabricContent && formData.append('fabricContent', JSON.stringify(fabricContent));
       
       axios.post('http://localhost:4000/api/content/save', formData, {
         headers: {

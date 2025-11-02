@@ -9,9 +9,10 @@ interface NavBarProps {
   onAuthChange?: (isAuth: boolean) => void;
   onTokenChange?: (token: string | null) => void;
   loginUser: (username: string) => void;
+  onHowToPlayClick?: () => void;
 }
 
-function NavBar({ onAuthChange, onTokenChange, loginUser }: NavBarProps): React.ReactElement {
+function NavBar({ onAuthChange, onTokenChange, loginUser, onHowToPlayClick }: NavBarProps): React.ReactElement {
   const [authorized, setAuthorized_] = useState<boolean>(false);
   const [token, setToken] = useState<string | null>(null);
 
@@ -42,18 +43,41 @@ function NavBar({ onAuthChange, onTokenChange, loginUser }: NavBarProps): React.
 
   return (
     <Navbar bg="dark" variant="dark" expand="lg">
-      <Container>
-        <Navbar.Brand href="#home">www.lan.ka/</Navbar.Brand>
+      <Container style={{ maxWidth: '2500px' }}>
+        <img src='static/images/pac.gif' width={350} alt='Pacman' style={{ paddingRight: '10px', marginLeft: '10px' }} />
+        <Navbar.Brand
+          href="#home"
+          style={{
+            fontFamily: '"Courier New", Consolas, Monaco, monospace',
+            fontSize: '32px',
+            fontWeight: 'bold',
+            letterSpacing: '2px',
+            color: '#00ff88',
+            textShadow: '0 0 10px rgba(0, 255, 136, 0.5), 0 0 20px rgba(0, 255, 136, 0.3)',
+            transition: 'all 0.3s ease'
+          }}
+          onMouseEnter={(e) => {
+            (e.target as HTMLElement).style.color = '#00ddff';
+            (e.target as HTMLElement).style.textShadow = '0 0 15px rgba(0, 221, 255, 0.7), 0 0 30px rgba(0, 221, 255, 0.4)';
+          }}
+          onMouseLeave={(e) => {
+            (e.target as HTMLElement).style.color = '#00ff88';
+            (e.target as HTMLElement).style.textShadow = '0 0 10px rgba(0, 255, 136, 0.5), 0 0 20px rgba(0, 255, 136, 0.3)';
+          }}
+        >
+          lan.ka/
+        </Navbar.Brand>
         <Nav className="ms-auto align-items-center">
-          <Button variant="outline-light" className="me-2">
-            How to play
+          <Button
+            variant="outline-light"
+            className="me-2"
+            onClick={onHowToPlayClick}
+          >
+            Sitting order
           </Button>
           <AuthModal onAuthChange={setAuthorized} authToken={handleTokenChange} />
           {authorized && (
-            <span style={{ padding: '0 15px' }} className="text-white">
-              {' '}
-              Welcome! {username}
-            </span>
+            <span style={{ padding: '0 18px' }} className="text-white">Welcome! {username}</span>
           )}
         </Nav>
       </Container>
