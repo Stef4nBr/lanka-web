@@ -42,7 +42,7 @@ function LeandingPage() {
     RemirrorJSON | undefined
   >(() => {
     const content = window.localStorage.getItem("remirror-editor-content");
-    return content ? JSON.parse(content) : undefined;
+    return content ? JSON.parse(content) : { type: "doc", content: [] };
   });
 
   // Trigger on mount/page reload
@@ -62,14 +62,12 @@ function LeandingPage() {
         const response = await axios.get(
           `http://localhost:4000/api/content/load/${userName}`,
           {
-            headers: {
-              Authorization: `Bearer ${authToken}`,
-            },
+            headers: { Authorization: `Bearer ${authToken}` },
           }
         );
         const { mdxContent } = response.data;
         const { fabricContent } = response.data;
-        const parsedContent = mdxContent ? JSON.parse(mdxContent) : undefined;
+        const parsedContent = mdxContent ? JSON.parse(mdxContent) : { type: "doc", content: [] };
         const parsedFabricContent = fabricContent
           ? JSON.parse(fabricContent)
           : undefined;
@@ -144,9 +142,8 @@ function LeandingPage() {
               title={showEditor ? "Leave Editor" : "Show Editor"}
             >
               <i
-                className={`bi ${
-                  showEditor ? "bi-arrow-90deg-left" : "bi-pencil"
-                }`}
+                className={`bi ${showEditor ? "bi-arrow-90deg-left" : "bi-pencil"
+                  }`}
               ></i>
             </button>
           )}
