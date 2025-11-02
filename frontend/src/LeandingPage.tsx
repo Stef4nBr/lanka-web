@@ -69,17 +69,10 @@ function LeandingPage() {
         const { fabricContent } = response.data;
         const parsedContent = mdxContent ? JSON.parse(mdxContent) : { type: "doc", content: [] };
         const parsedFabricContent = fabricContent
-          ? JSON.parse(fabricContent)
-          : undefined;
-        window.localStorage.setItem(
-          "remirror-editor-content",
-          JSON.stringify(parsedContent)
-        );
+          ? JSON.parse(fabricContent): undefined;
+        window.localStorage.setItem("remirror-editor-content",JSON.stringify(parsedContent));
         parsedFabricContent &&
-          window.localStorage.setItem(
-            "fabric-editor-content",
-            JSON.stringify(parsedFabricContent)
-          );
+          window.localStorage.setItem("fabric-editor-content", JSON.stringify(parsedFabricContent));
         setInitialContent(parsedContent);
       } catch (error) {
         console.error("Error loading content:", error);
@@ -157,10 +150,13 @@ function LeandingPage() {
             <div
               className="remirror-editor"
               style={{
-                border: "1px solid #ddd",
-                borderRadius: "8px",
-                padding: "20px",
-                backgroundColor: "#e7dadaff",
+              border: "1px solid #121111ff",
+              borderRadius: "8px",
+              padding: "20px",
+              background: "linear-gradient(135deg, #e7dadaff 40%, #cfcfcf 70%, #b0c4de 100%)",
+              boxShadow:
+                "0 8px 32px 0 rgba(31, 38, 135, 0.15), 0 1.5px 8px 0 rgba(80, 80, 80, 0.08)",
+              transition: "box-shadow 0.2s",
               }}
             >
               <Remirror

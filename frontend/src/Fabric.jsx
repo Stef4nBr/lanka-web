@@ -400,13 +400,14 @@ function FabricTest({ authenticated = false, loginUser, editMode = false }) {
             style={{
               minWidth: '40px',
               width: '120px',
-              border: '2px solid #ddd',
-              borderRadius: '8px',
+ 
+       
               padding: '15px',
               backgroundColor: '#f9f9f9',
               maxHeight: '600px',
               overflowY: 'auto',
               boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
+              
             }}
           >
             <h3 style={{ fontSize: '18px', marginTop: 0, marginBottom: '15px', fontWeight: 'bold' }}>Item Library</h3>
@@ -536,7 +537,7 @@ function FabricTest({ authenticated = false, loginUser, editMode = false }) {
             {isFullscreen ? '✕ Exit Fullscreen' : '⛶'}
           </button>
 
-          <canvas ref={canvasRef} style={{ border: '2px solid #333', borderRadius: '4px', width: '100%', maxWidth: '100%' }} />
+          <canvas ref={canvasRef} style={{ border: '1px solid #121111', borderRadius: '8px', width: '100%', maxWidth: '100%' }} />
           <p style={{ marginTop: '10px', fontSize: '14px', color: isFullscreen ? '#ccc' : '#666' }}>
             {canEdit
               ? 'Click on an item in the sidebar to add it to the canvas. Images, shapes, and text can be dragged, resized, and rotated. Use the controls to delete or clone.'

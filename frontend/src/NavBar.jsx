@@ -34,9 +34,9 @@ function NavBar({ onAuthChange, onTokenChange, loginUser, onHowToPlayClick }) {
 
   return (
     <Navbar bg="dark" variant="dark" expand="lg">
-      <Container style={{maxWidth:'2500px'}}>
-        <img src='static/images/pac.gif' width={350} alt='Pacman' />
-        <Navbar.Brand 
+      <Container style={{ maxWidth: '2500px' }}>
+        <img src='static/images/pac.gif' width={350} alt='Pacman' style={{ paddingRight: '10px' }} />
+        <Navbar.Brand
           href="#home"
           style={{
             fontFamily: '"Courier New", Consolas, Monaco, monospace',
@@ -56,11 +56,11 @@ function NavBar({ onAuthChange, onTokenChange, loginUser, onHowToPlayClick }) {
             e.target.style.textShadow = '0 0 10px rgba(0, 255, 136, 0.5), 0 0 20px rgba(0, 255, 136, 0.3)';
           }}
         >
-          www.lan.ka/
+          lan.ka/
         </Navbar.Brand>
         <Nav className="ms-auto align-items-center">
-          <Button 
-            variant="outline-light" 
+          <Button
+            variant="outline-light"
             className="me-2"
             onClick={onHowToPlayClick}
           >
@@ -68,7 +68,7 @@ function NavBar({ onAuthChange, onTokenChange, loginUser, onHowToPlayClick }) {
           </Button>
           <AuthModal variant="primary" onAuthChange={setAuthorized} authToken={handleTokenChange} />
           {authorized && (
-            <span style={{padding: '0 18px'}} className="text-white">Welcome! {username}</span>
+            <span style={{ padding: '0 18px' }} className="text-white">Welcome! {username}</span>
           )}
         </Nav>
       </Container>
