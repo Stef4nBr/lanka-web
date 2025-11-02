@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
 import { Remirror, useRemirror } from "@remirror/react";
-import { set, type RemirrorJSON } from "remirror";
-import NavBar from "./NavBar.jsx";
-import FabricTest from "./Fabric.jsx";
-import MdxEditor from "./MdxEditor.tsx";
+import { RemirrorJSON } from "remirror";
+import NavBar from "./NavBar";
+import Fabric from "./Fabric";
+import MdxEditor from "./MdxEditor";
 import "./index.css";
 
 import {
@@ -39,7 +39,7 @@ function LeandingPage() {
 
   const [initialContent, setInitialContent] = useState<RemirrorJSON | undefined>(() => {
     const content = window.localStorage.getItem("remirror-editor-content");
-    return content ? JSON.parse(content) : undefined;
+    return content ? JSON.parse(content) : { type: "doc", content: []};
   });
 
   // Trigger on mount/page reload
@@ -61,7 +61,7 @@ function LeandingPage() {
           }
         );
         const { json } = response.data;
-        const parsedContent = json ? JSON.parse(json) : undefined;
+        const parsedContent = json ? JSON.parse(json) : { type: "doc", content: []};
         window.localStorage.setItem("remirror-editor-content", JSON.stringify(parsedContent));
         setInitialContent(parsedContent);
       } catch (error) {
@@ -115,7 +115,7 @@ function LeandingPage() {
             marginBottom: "20px",
           }}
         >
-          <h1 style={{ margin: 0 }}>Rendered Document</h1>
+            <h1 style={{ margin: 0, textAlign: "center", flex: 1 }}>Welcome to LanParty</h1>
           {authenticated && (
             <button
               onClick={() => setShowEditor(!showEditor)}
@@ -139,22 +139,25 @@ function LeandingPage() {
             <div
               className="remirror-editor"
               style={{
-                border: "1px solid #ddd",
-                borderRadius: "8px",
-                padding: "20px",
-                backgroundColor: "#e7dadaff",
+              border: "1px solid #121111ff",
+              borderRadius: "8px",
+              padding: "20px",
+              background: "linear-gradient(135deg, #e7dadaff 40%, #cfcfcf 70%, #b0c4de 100%)",
+              boxShadow:
+                "0 8px 32px 0 rgba(31, 38, 135, 0.15), 0 1.5px 8px 0 rgba(80, 80, 80, 0.08)",
+              transition: "box-shadow 0.2s",
               }}
             >
               <Remirror
-                manager={manager}
-                initialContent={initialContent}
-                editable={false}
+              manager={manager}
+              initialContent={initialContent}
+              editable={false}
               />
             </div>
           </>
         )}
       </div>
-      <FabricTest />
+      <Fabric />
     </>
   );
 }

@@ -1,4 +1,38 @@
-const ExampleTheme = {
+interface EditorTheme {
+  code: string;
+  heading: {
+    h1: string;
+    h2: string;
+    h3: string;
+    h4: string;
+    h5: string;
+  };
+  image: string;
+  link: string;
+  list: {
+    listitem: string;
+    nested: {
+      listitem: string;
+    };
+    ol: string;
+    ul: string;
+  };
+  paragraph: string;
+  placeholder: string;
+  quote: string;
+  text: {
+    bold: string;
+    code: string;
+    hashtag: string;
+    italic: string;
+    overflowed: string;
+    strikethrough: string;
+    underline: string;
+    underlineStrikethrough: string;
+  };
+}
+
+const ExampleTheme: EditorTheme = {
   code: 'editor-code',
   heading: {
     h1: 'editor-heading-h1',
