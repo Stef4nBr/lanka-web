@@ -1,3 +1,4 @@
+require('dotenv').config();
 const sqlite3 = require("sqlite3").verbose();
 const db = new sqlite3.Database("./data.db");
 
@@ -26,11 +27,11 @@ db.serialize(() => {
         );
         `);
 
-  // Insert admin user
+  // Insert admin user from environment variables
   db.run(`
         INSERT OR IGNORE INTO users (name, email, password)
-        VALUES ('admin', 'admin@example.com', 'password');
-    `);
+        VALUES (?, ?, ?);
+    `, [process.env.ADMIN_USERNAME, process.env.ADMIN_EMAIL, process.env.ADMIN_PASSWORD]);
 });
 
 // Wrapping db.get in a Promise to use await

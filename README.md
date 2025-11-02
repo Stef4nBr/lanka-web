@@ -102,10 +102,11 @@ lanka-web/
 ├── backend/                 # Node.js Express API
 │   ├── routes/             # API route handlers
 │   │   ├── auth.js         # Authentication routes
-│   │   └── users.js        # User management routes
+│   │   └── content.js      # Content management routes
 │   ├── database.js         # Database configuration
 │   ├── data.db            # SQLite database file
-│   └── index.js           # Express server entry point
+│   ├── index.js           # Express server entry point
+│   └── .env               # Environment variables (not in git)
 └── package.json           # Root package configuration
 ```
 
@@ -159,12 +160,22 @@ The optimized build will be created in the `frontend/build` directory.
 
 ### Environment Variables
 
-Create a `.env` file in the backend directory:
+Create a `.env` file in the backend directory with the following variables:
 
 ```
+# JWT Configuration
 JWT_SECRET=your_secret_key_here
+
+# Database Configuration
+ADMIN_USERNAME=admin
+ADMIN_EMAIL=admin@example.com
+ADMIN_PASSWORD=password
+
+# Server Configuration
 PORT=4000
 ```
+
+**Important:** The `.env` file contains sensitive information and should never be committed to version control. Make sure it's listed in your `.gitignore` file.
 
 ## Browser Support
 
