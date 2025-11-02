@@ -1,9 +1,9 @@
 import { useState, useEffect, useRef } from "react";
 import { Remirror, useRemirror } from "@remirror/react";
-import { set, type RemirrorJSON } from "remirror";
-import NavBar from "./NavBar.jsx";
-import FabricTest from "./Fabric.jsx";
-import MdxEditor from "./MdxEditor.tsx";
+import { RemirrorJSON } from "remirror";
+import NavBar from "./NavBar";
+import FabricTest from "./Fabric";
+import MdxEditor from "./MdxEditor";
 import "./index.css";
 
 import {
@@ -126,7 +126,23 @@ function LeandingPage() {
             marginBottom: "20px",
           }}
         >
-          <h1 style={{ margin: '20px' }}>Announcements</h1>
+          <h1 style={{ 
+            margin: '20px',
+            fontSize: '2.5rem',
+            fontWeight: '700',
+            background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+            WebkitBackgroundClip: 'text',
+            WebkitTextFillColor: 'transparent',
+            backgroundClip: 'text',
+            textTransform: 'uppercase',
+            letterSpacing: '2px',
+            position: 'relative',
+            paddingBottom: '10px',
+            borderBottom: '3px solid #667eea',
+            display: 'inline-block'
+          }}>
+             Announcements
+          </h1>
           {authenticated && (
             <button
               style={{ margin: "15px" }}
@@ -160,9 +176,9 @@ function LeandingPage() {
               }}
             >
               <Remirror
-                manager={manager}
-                initialContent={initialContent}
-                editable={false}
+              manager={manager}
+              initialContent={initialContent}
+              editable={false}
               />
             </div>
           </>
@@ -172,6 +188,7 @@ function LeandingPage() {
             authenticated={authenticated}
             loginUser={userName}
             editMode={showEditor}
+            token={authToken}
           />
         </div>
       </div>

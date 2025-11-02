@@ -38,6 +38,7 @@
     "@remirror/react": "^3.0.3",
     "@remirror/react-editors": "^2.0.3",
     "jwt-decode": "^4.0.0",
+    "multer": "^2.0.2",
     "remirror": "^3.0.3"
   }
 }

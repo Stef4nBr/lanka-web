@@ -188,7 +188,7 @@ export default function Editor({ token, loginUser }: { token: any; loginUser: an
           alert('Failed to save content.');
         });
     }
-  }, [currentContent, STORAGE_KEY]);
+  }, [currentContent, loginUser, token]);
 
   const { manager, state } = useRemirror({
     extensions,

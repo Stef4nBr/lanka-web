@@ -2,7 +2,6 @@ const cors = require('cors');
 require("dotenv").config(); // Load the .env file
 const express = require('express');
 const app = express();
-const userRoutes = require('./routes/users');
 const authRoutes = require('./routes/auth');
 const contentRoutes = require('./routes/content');
 
@@ -15,7 +14,6 @@ app.use(cors({
 	methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
 	allowedHeaders: ['Content-Type', 'Authorization']
 }));
-app.use('/api/users', userRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/content', contentRoutes);
 
