@@ -17,7 +17,6 @@ function Fabric(): React.ReactElement {
 
         <canvas id="fabricCanvas" width="800" height="600">
 
-
         </canvas>
     </div>
   );
