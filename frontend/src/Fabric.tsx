@@ -261,20 +261,6 @@ function FabricTest({ authenticated = false, loginUser, editMode = false, token 
         setFabricContentFromCookie(jsonString);
         window.localStorage.setItem("fabric-editor-content", jsonString);
         console.log('Canvas saved to localStorage');
-
-        try {
-          await axios.post(
-            `http://localhost:4000/api/content/save/${loginUser}`,
-            { json: jsonString, type: 'fabric' },
-            {
-              headers: {
-                Authorization: `Bearer ${token}`,
-              },
-            }
-          );
-        } catch (error) {
-          console.error('Error saving canvas to server:', error);
-        }
       }
     };
 
