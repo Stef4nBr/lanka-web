@@ -281,7 +281,7 @@ export default function Editor({ token, loginUser }: { token: any; loginUser: an
       formData.append('mdxContent', JSON.stringify(currentContent));
       fabricContent && formData.append('fabricContent', JSON.stringify(fabricContent));
       
-      axios.post('http://localhost:4000/api/content/save', formData, {
+      axios.post(`${process.env.REACT_APP_API_URL}/api/content/save`, formData, {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'multipart/form-data'

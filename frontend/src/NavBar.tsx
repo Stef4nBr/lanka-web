@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import AuthModal from './AuthModal';
 import Container from 'react-bootstrap/Container';
 import Navbar from 'react-bootstrap/Navbar';
@@ -34,12 +34,17 @@ function NavBar({ onAuthChange, onTokenChange, loginUser, onHowToPlayClick }: Na
       if (!jwt) return '';
       
       const payload = JSON.parse(atob(jwt.split('.')[1]));
-      loginUser(payload.username);
       return payload.username || '';
     } catch (e) {
       return '';
     }
-  }, [authorized, token, loginUser]);
+  }, [authorized, token]);
+
+  useEffect(() => {
+    if (username) {
+      loginUser(username);
+    }
+  }, [username, loginUser]);
 
   return (
     <Navbar bg="dark" variant="dark" expand="lg">

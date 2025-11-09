@@ -1,0 +1,48 @@
+# Lanka Web - Docker Ignore File
+
+# Git
+.git
+.gitignore
+.gitattributes
+
+# Documentation
+README.md
+*.md
+
+# Node modules (will be installed in container)
+node_modules/
+frontend/node_modules/
+backend/node_modules/
+
+# Build artifacts
+frontend/build/
+frontend/.cache/
+
+# Development files
+.vscode/
+.idea/
+*.log
+
+# Environment files (should be provided at runtime)
+.env
+backend/.env
+frontend/.env
+
+# Test files
+**/*.test.js
+**/*.test.tsx
+**/*.test.ts
+**/*.spec.js
+coverage/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Database (should be mounted as volume)
+backend/data.db
+
+# Public files (should be mounted as volume if needed)
+frontend/public/files/*
+!frontend/public/files/.gitkeep
+!frontend/public/files/README.md

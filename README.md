@@ -33,7 +33,47 @@ Lanka Web is a full-stack application that provides LAN party organizers with to
 - npm or yarn package manager
 - Git
 
+**Or for Docker:**
+- Docker
+- Docker Compose
+
 ## Installation
+
+### Option 1: Docker (Recommended for Production)
+
+1. Clone the repository:
+```bash
+git clone https://github.com/Stef4nBr/lanka-web.git
+cd lanka-web
+```
+
+2. Create environment file:
+```bash
+cp .env.example .env
+```
+
+3. Edit `.env` and update the values (especially JWT_SECRET and ADMIN_PASSWORD)
+
+4. Build and run with Docker Compose:
+```bash
+docker-compose up -d
+```
+
+The application will be available at:
+- Frontend: `http://localhost:3000`
+- Backend API: `http://localhost:4000`
+
+5. To stop the application:
+```bash
+docker-compose down
+```
+
+6. To view logs:
+```bash
+docker-compose logs -f
+```
+
+### Option 2: Manual Installation
 
 ### Clone the Repository
 

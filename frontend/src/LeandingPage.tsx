@@ -37,6 +37,7 @@ function LeandingPage() {
   const [authenticated, setAuthenticated] = useState(false);
   const [userName, setUserName] = useState<string | null>(null);
   const [reloadTrigger, setReloadTrigger] = useState(0);
+  const [isLoading, setIsLoading] = useState(true);
   const fabricRef = useRef<HTMLDivElement>(null);
 
   const [initialContent, setInitialContent] = useState<
@@ -57,11 +58,10 @@ function LeandingPage() {
 
   useEffect(() => {
     const loadContent = async () => {
-      // if (!authToken || !userName) return;
 
       try {
         const response = await axios.get(
-          `http://localhost:4000/api/content/load/${userName ? userName : 'anonymous'}`,
+          `${process.env.REACT_APP_API_URL}/api/content/load/${userName ? userName : 'anonymous'}`,
           {
             headers: { Authorization: `Bearer ${authToken}` },
           }
@@ -72,14 +72,17 @@ function LeandingPage() {
         const parsedFabricContent = fabricContent ? JSON.parse(fabricContent): undefined;
         window.localStorage.setItem("remirror-editor-content",JSON.stringify(parsedContent));
         parsedFabricContent &&
-          window.localStorage.setItem("fabric-editor-content", parsedFabricContent);
+        window.localStorage.setItem("fabric-editor-content", parsedFabricContent);
         setInitialContent(parsedContent);
+
       } catch (error) {
         console.error("Error loading content:", error);
+      } finally {
+        setIsLoading(false);
       }
     };
-
     loadContent();
+
   }, [authToken, userName, reloadTrigger]);
 
   const { manager } = useRemirror({
@@ -108,6 +111,21 @@ function LeandingPage() {
     ],
     content: initialContent,
   });
+
+  if (isLoading) {
+    return (
+      <div style={{ 
+        display: 'flex', 
+        justifyContent: 'center', 
+        alignItems: 'center', 
+        height: '100vh',
+        fontSize: '1.5rem',
+        color: '#667eea'
+      }}>
+        Loading...
+      </div>
+    );
+  }
 
   return (
     <>

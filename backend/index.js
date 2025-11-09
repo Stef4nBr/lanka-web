@@ -10,12 +10,12 @@ app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ limit: '50mb', extended: true }));
 
 app.use(cors({
-	origin: '*', // Allow all origins; restrict in production as needed
+	origin: '*', // Allow all origins
 	methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
 	allowedHeaders: ['Content-Type', 'Authorization']
 }));
 app.use('/api/auth', authRoutes);
 app.use('/api/content', contentRoutes);
 
-const PORT = 4000;
+const PORT = process.env.PORT || 4000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

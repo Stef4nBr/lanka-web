@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Canvas, FabricImage, Circle, FabricText, Control, util, type FabricObject } from 'fabric';
-import axios from 'axios';
 
 // SVG icons as data URLs
 const deleteIcon =
@@ -249,7 +248,7 @@ function FabricTest({ authenticated = false, loginUser, editMode = false, token 
         canvas.renderAll();
         console.log('Canvas loaded from localStorage');
       }).catch((err) => {
-        console.error('Error loading canvas:', err);
+       
       });
     }
 

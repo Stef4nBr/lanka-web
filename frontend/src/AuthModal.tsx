@@ -38,7 +38,7 @@ function AuthModal({ onAuthChange, authToken }: AuthModalProps): React.ReactElem
   const handleLogin = async (): Promise<void> => {
     try {
       const response = await axios.post<{ token: string }>(
-        'http://localhost:4000/api/auth/sign-in',
+        `${process.env.REACT_APP_API_URL}/api/auth/sign-in`,
         { username: email, password: password },
         { headers: { 'Content-Type': 'application/json' } }
       );
