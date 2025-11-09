@@ -72,19 +72,17 @@ function insertContent({ user_id, mdxContent, fabricContent }) {
 
 function loadContent(user_id) {
   return new Promise((resolve, reject) => {
-    db.get("SELECT * FROM content WHERE user_id = ?", [user_id], (err, row) => {
-      if (err) return reject(err);
-
-      // If no content found for specific user, get all content
-      if (!row) {
-        db.all("SELECT * FROM content", [], (err, rows) => {
-          if (err) return reject(err);
-          resolve(rows);
-        });
-      } else {
+    if (user_id === 'anonymous') {
+      db.all("SELECT * FROM content", [], (err, rows) => {
+        if (err) return reject(err);
+        resolve(rows[0] || null);
+      });
+    } else {
+      db.get("SELECT * FROM content WHERE user_id = ?", [user_id], (err, row) => {
+        if (err) return reject(err);
         resolve(row);
-      }
-    });
+      });
+    }
   });
 }
 

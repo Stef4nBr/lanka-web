@@ -537,12 +537,17 @@ function FabricTest({ authenticated = false, loginUser, editMode = false, token 
         {/* Canvas area */}
         <div 
           ref={canvasContainerRef}
+          className={!editMode ? "remirror-editor" : ""}
           style={{ 
             flex: 1, 
             maxWidth: editMode ? '800px' : '1000px',
             position: 'relative',
-            backgroundColor: isFullscreen ? '#e9e9e9ff' : 'transparent',
-            padding: isFullscreen ? '20px' : '0',
+            border: "1px solid #121111ff",
+            borderRadius: "8px",
+            padding: !editMode ? "20px" : "0",
+            background: !editMode ? "linear-gradient(135deg, #e7dadaff 40%, #cfcfcf 70%, #b0c4de 100%)" : "transparent",
+            boxShadow: !editMode ? "0 8px 32px 0 rgba(31, 38, 135, 0.15), 0 1.5px 8px 0 rgba(80, 80, 80, 0.08)" : "none",
+            transition: "box-shadow 0.2s",
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
@@ -580,8 +585,8 @@ function FabricTest({ authenticated = false, loginUser, editMode = false, token 
             {isFullscreen ? '✕ Exit Fullscreen' : '⛶'}
           </button>
 
-          <canvas ref={canvasRef} style={{ border: '1px solid #121111', borderRadius: '8px', width: '100%', maxWidth: '100%' }} />
-          <p style={{ marginTop: '10px', fontSize: '14px', color: isFullscreen ? '#ccc' : '#666' }}>
+          <canvas ref={canvasRef} style={{ borderRadius: '8px', width: '100%', maxWidth: '100%' }} />
+          <p style={{ marginTop: '10px', fontSize: '14px', color: '#666' }}>
             {canEdit
               ? 'Click on an item in the sidebar to add it to the canvas. Images, shapes, and text can be dragged, resized, and rotated. Use the controls to delete or clone.'
               : 'Sign in to add and edit items on the canvas.'

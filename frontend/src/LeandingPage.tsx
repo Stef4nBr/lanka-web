@@ -56,11 +56,11 @@ function LeandingPage() {
 
   useEffect(() => {
     const loadContent = async () => {
-      if (!authToken || !userName) return;
+      // if (!authToken || !userName) return;
 
       try {
         const response = await axios.get(
-          `http://localhost:4000/api/content/load/${userName}`,
+          `http://localhost:4000/api/content/load/${userName ? userName : 'anonymous'}`,
           {
             headers: { Authorization: `Bearer ${authToken}` },
           }
@@ -68,11 +68,10 @@ function LeandingPage() {
         const { mdxContent } = response.data;
         const { fabricContent } = response.data;
         const parsedContent = mdxContent ? JSON.parse(mdxContent) : { type: "doc", content: [] };
-        const parsedFabricContent = fabricContent
-          ? JSON.parse(fabricContent): undefined;
+        const parsedFabricContent = fabricContent ? JSON.parse(fabricContent): undefined;
         window.localStorage.setItem("remirror-editor-content",JSON.stringify(parsedContent));
         parsedFabricContent &&
-          window.localStorage.setItem("fabric-editor-content", JSON.stringify(parsedFabricContent));
+          window.localStorage.setItem("fabric-editor-content", parsedFabricContent);
         setInitialContent(parsedContent);
       } catch (error) {
         console.error("Error loading content:", error);

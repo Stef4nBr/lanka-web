@@ -36,12 +36,12 @@ router.post("/save", authenticateToken, upload.none(), async (req, res) => {
     });
 });
 
-router.get("/load/:user_id", authenticateToken, async (req, res) => {
+router.get("/load/:user_id",  async (req, res) => {
     const { user_id } = req.params;
 
-    if (!user_id) {
-        return res.status(400).json({ error: "User ID is required" });
-    }
+    // if (!user_id) {
+    //     return res.status(400).json({ error: "User ID is required" });
+    // }
 
     // Load content for the user
     await loadContent(user_id)
