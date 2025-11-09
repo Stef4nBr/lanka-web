@@ -26,6 +26,7 @@ import {
   TrailingNodeExtension,
   NodeFormattingExtension,
   TextHighlightExtension,
+  TextColorExtension,
 } from "remirror/extensions";
 import { TableExtension } from "@remirror/extension-react-tables";
 import axios from "axios";
@@ -103,6 +104,7 @@ function LeandingPage() {
       new TaskListExtension({}),
       new NodeFormattingExtension({}),
       new TextHighlightExtension({}),
+      new TextColorExtension({}),
     ],
     content: initialContent,
   });

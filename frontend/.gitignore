@@ -18,6 +18,10 @@
 .env.test.local
 .env.production.local
 
+# public files folder content
+/public/files/*
+!/public/files/.gitkeep
+
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*

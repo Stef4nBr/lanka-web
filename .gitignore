@@ -47,3 +47,11 @@ coverage/
 
 # Database files
 backend/data.db
+
+# User uploaded files
+backend/files/*
+!backend/files/.gitkeep
+
+# Public files directory (content should not be committed)
+backend/public/files/*
+!backend/public/files/.gitkeep

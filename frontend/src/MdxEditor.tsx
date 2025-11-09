@@ -124,6 +124,113 @@ const HighlightButtons = () => {
   );
 };
 
+const TextColorButtons = () => {
+  const commands = useCommands();
+  return (
+    <div style={{ display: 'flex', gap: '8px', alignItems: 'center', marginTop: '8px' }}>
+      <span style={{ fontWeight: 'bold', marginRight: '4px' }}>Text Color:</span>
+      <button
+        onMouseDown={(event) => event.preventDefault()}
+        onClick={() => commands.setTextColor('red')}
+        style={{ 
+          backgroundColor: 'red', 
+          color: 'white', 
+          border: '1px solid #ccc',
+          borderRadius: '4px',
+          padding: '4px 12px',
+          cursor: 'pointer'
+        }}
+      >
+        Red
+      </button>
+      <button
+        onMouseDown={(event) => event.preventDefault()}
+        onClick={() => commands.setTextColor('blue')}
+        style={{ 
+          backgroundColor: 'blue', 
+          color: 'white', 
+          border: '1px solid #ccc',
+          borderRadius: '4px',
+          padding: '4px 12px',
+          cursor: 'pointer'
+        }}
+      >
+        Blue
+      </button>
+      <button
+        onMouseDown={(event) => event.preventDefault()}
+        onClick={() => commands.setTextColor('green')}
+        style={{ 
+          backgroundColor: 'green', 
+          color: 'white', 
+          border: '1px solid #ccc',
+          borderRadius: '4px',
+          padding: '4px 12px',
+          cursor: 'pointer'
+        }}
+      >
+        Green
+      </button>
+      <button
+        onMouseDown={(event) => event.preventDefault()}
+        onClick={() => commands.setTextColor('orange')}
+        style={{ 
+          backgroundColor: 'orange', 
+          color: 'white', 
+          border: '1px solid #ccc',
+          borderRadius: '4px',
+          padding: '4px 12px',
+          cursor: 'pointer'
+        }}
+      >
+        Orange
+      </button>
+      <button
+        onMouseDown={(event) => event.preventDefault()}
+        onClick={() => commands.setTextColor('purple')}
+        style={{ 
+          backgroundColor: 'purple', 
+          color: 'white', 
+          border: '1px solid #ccc',
+          borderRadius: '4px',
+          padding: '4px 12px',
+          cursor: 'pointer'
+        }}
+      >
+        Purple
+      </button>
+      <button
+        onMouseDown={(event) => event.preventDefault()}
+        onClick={() => commands.setTextColor('#000000')}
+        style={{ 
+          backgroundColor: 'black', 
+          color: 'white', 
+          border: '1px solid #ccc',
+          borderRadius: '4px',
+          padding: '4px 12px',
+          cursor: 'pointer'
+        }}
+      >
+        Black
+      </button>
+      <button
+        onMouseDown={(event) => event.preventDefault()}
+        onClick={() => commands.removeTextColor()}
+        style={{ 
+          backgroundColor: '#f5f5f5', 
+          color: '#333', 
+          border: '1px solid #ccc',
+          borderRadius: '4px',
+          padding: '4px 12px',
+          cursor: 'pointer'
+        }}
+      >
+        Remove Color
+      </button>
+    </div>
+  );
+};
+
 function EditorToolbar() {
   return (
     <Toolbar  style={{ padding: '8px' }}>
@@ -235,6 +342,7 @@ export default function Editor({ token, loginUser }: { token: any; loginUser: an
             </div>
             <EditorToolbar />
             <HighlightButtons />
+            <TextColorButtons />
           </Remirror>
         </ThemeProvider>
       </AllStyledComponent>
