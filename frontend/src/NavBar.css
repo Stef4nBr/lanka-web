@@ -1,0 +1,11 @@
+/* Simple gradient ramp for NavBar - Child 10 colors */
+.navbar-gradient {
+  background: linear-gradient(90deg, #212529 0%, #212529 50%, #186d56 100%);
+  box-shadow: 0 2px 17px #212529;
+}
+
+/* Logged in state - light orange accent */
+.navbar-gradient.logged-in {
+  background: linear-gradient(90deg, #212529 0%, #212529 50%, #ee631e 100%);
+  box-shadow: 0 2px 17px #212529;
+}

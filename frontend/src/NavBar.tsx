@@ -4,6 +4,7 @@ import Container from 'react-bootstrap/Container';
 import Navbar from 'react-bootstrap/Navbar';
 import Nav from 'react-bootstrap/Nav';
 import Button from 'react-bootstrap/Button';
+import './NavBar.css';
 
 interface NavBarProps {
   onAuthChange?: (isAuth: boolean) => void;
@@ -47,7 +48,7 @@ function NavBar({ onAuthChange, onTokenChange, loginUser, onHowToPlayClick }: Na
   }, [username, loginUser]);
 
   return (
-    <Navbar bg="dark" variant="dark" expand="lg">
+    <Navbar className={`navbar-gradient ${authorized ? 'logged-in' : ''}`} variant="dark" expand="lg">
       <Container style={{ maxWidth: '2500px' }}>
         <img src='static/images/pac.gif' width={350} alt='Pacman' style={{ paddingRight: '10px', marginLeft: '10px' }} />
         <Navbar.Brand
